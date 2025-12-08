@@ -1,0 +1,30 @@
+# FROM node:18
+# COPY . /app/
+# WORKDIR /app
+# RUN npm install
+# CMD ["npm", "start"]
+
+# FROM node:18
+# WORKDIR /app
+# COPY package*.json ./
+# RUN npm install
+# COPY . .
+# CMD ["npm", "start"]
+
+FROM node:18-alpine
+WORKDIR /app
+# Dependencies
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Source code
+COPY . .
+
+# Health check (optional)
+HEALTHCHECK CMD node healthcheck.js || exit 1
+
+# Metadata
+EXPOSE 3000
+USER node
+
+CMD ["npm", "start"]

@@ -1,0 +1,26 @@
+# FROM ubuntu:22.04
+# RUN apt update
+# RUN apt install -y curl
+# RUN apt install -y vim
+# COPY app.js /app/
+# CMD ["node", "/app/app.js"]
+
+# FROM node:18-alpine
+# RUN apk add --no-cache curl vim
+# COPY app.js /app/
+# CMD ["node", "/app/app.js"]
+
+# FROM node:18-slim
+# ENV DEBIAN_FRONTEND=noninteractive
+# RUN apt-get update && apt-get install -y \
+#     curl \
+#     vim \
+#     && rm -rf /var/lib/apt/lists/*
+# WORKDIR /app
+# COPY app.js .
+# CMD ["node", "app.js"]
+
+FROM node:18-alpine
+WORKDIR /app
+COPY app.js .
+CMD ["node", "app.js"]
