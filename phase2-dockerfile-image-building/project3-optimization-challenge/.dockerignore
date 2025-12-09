@@ -1,0 +1,66 @@
+# ==============================
+# 1. Dependencies & System
+# ==============================
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.pnpm-debug.log*
+
+# ==============================
+# 2. Build Output
+# ==============================
+dist
+build
+coverage
+*.js.map
+*.d.ts.map
+
+# ==============================
+# 3. Environment & Secrets (สำคัญมาก!)
+# ==============================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ==============================
+# 4. Git & CI/CD
+# ==============================
+.git
+.gitignore
+.github
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+
+# ==============================
+# 5. Docker Files (ไม่ต้องเอาตัวเองเข้าไป)
+# ==============================
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# ==============================
+# 6. IDE & OS Files
+# ==============================
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ==============================
+# 7. Documentation & Logs
+# ==============================
+README.md
+CHANGELOG.md
+LICENSE
+docs
+logs
+*.log
+tmp
+temp

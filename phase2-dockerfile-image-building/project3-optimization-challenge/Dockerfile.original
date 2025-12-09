@@ -1,0 +1,41 @@
+# ============================================
+# THE BAD DOCKERFILE - DO NOT USE IN PRODUCTION!
+# ============================================
+
+FROM node:18
+
+WORKDIR /app
+
+# Install everything at once
+COPY . .
+
+# Install all dependencies (including dev)
+RUN npm install
+RUN cd app/backend && npm install
+RUN cd app/frontend && npm install
+
+# Build everything
+RUN npm run build
+
+# No cleanup, no optimization, runs as root
+EXPOSE 3000
+
+CMD ["npm", "start"]
+
+# **Problems identified:**
+# 1. Full node:18 image (900 MB base)
+# 2. Copies everything first (terrible caching)
+# 3. Installs dev dependencies
+# 4. No multi-stage
+# 5. Runs as root
+# 6. No nginx for frontend
+# 7. Build artifacts included
+# 8. No health check
+# 9. Multiple node_modules folders
+# 10. webpack, typescript in final image
+
+# **Result:**
+# - Size: ~2.5 GB
+# - Build time: 8 minutes
+# - Security: Poor
+# - Performance: Slow
