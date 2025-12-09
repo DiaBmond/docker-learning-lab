@@ -38,7 +38,7 @@ Build an Express API with TypeScript that showcases:
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Application Structure
 ```
@@ -354,7 +354,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 
 ---
 
-## 🔧 Development Workflow
+## Development Workflow
 
 ### Local Development
 ```bash
@@ -422,7 +422,7 @@ curl http://localhost:3000/health
 
 ---
 
-## 📁 Project Files
+## Project Files
 
 ### package.json
 ```json
@@ -492,7 +492,7 @@ coverage/
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Issue: Build fails at npm ci
 
@@ -584,7 +584,7 @@ dive express-api
 
 ---
 
-## 📊 Performance Benchmarks
+## Performance Benchmarks
 
 ### Image Size Breakdown
 
