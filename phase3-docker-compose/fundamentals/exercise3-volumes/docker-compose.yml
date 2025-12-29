@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./app
+    container_name: volume-demo
+    ports:
+      - "3000:3000"
+    volumes:
+      # Named volume (Docker-managed)
+      - app_data:/data
+      
+      # Bind mounts (Host directories)
+      - ./logs:/app/logs
+      - ./config:/etc/config:ro  # :ro = read-only
+      
+      # tmpfs (RAM storage)
+    tmpfs:
+      - /tmp:size=100m
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+
+# Define named volumes
+volumes:
+  app_data:
+    name: exercise3_app_data

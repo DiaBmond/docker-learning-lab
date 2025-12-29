@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # Frontend - Public network only
+  frontend:
+    build: ./frontend
+    container_name: web-frontend
+    ports:
+      - "80:80"
+    networks:
+      - public
+    depends_on:
+      - backend
+
+  # Backend - Both public and private networks
+  backend:
+    build: ./backend
+    container_name: api-backend
+    ports:
+      - "3000:3000"
+    networks:
+      - public    # ← Can talk to frontend
+      - private   # ← Can talk to database
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # Database - Private network only
+  database:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    networks:
+      - private   # ← Only accessible from backend!
+    environment:
+      - POSTGRES_DB=myapp
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+networks:
+  public:
+    driver: bridge
+    name: public-network
+  private:
+    driver: bridge
+    name: private-network
+    internal: true  # ← No external access!
+
+volumes:
+  postgres_data:

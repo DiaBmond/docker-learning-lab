@@ -1,0 +1,13 @@
+{
+    "app_name": "Volume Demo",
+    "version": "2.0.0",
+    "features": {
+        "named_volume": true,
+        "bind_mount": true,
+        "tmpfs": true
+    },
+    "settings": {
+        "max_file_size": "10MB",
+        "log_retention_days": 30
+    }
+}

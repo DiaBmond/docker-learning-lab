@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Isolation Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .network-box {
+            border: 2px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .public {
+            border-color: #4CAF50;
+            background: #f1f8f4;
+        }
+
+        .private {
+            border-color: #f44336;
+            background: #fef1f1;
+        }
+
+        button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #0b7dda;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+
+        .success {
+            color: #4CAF50;
+        }
+
+        .error {
+            color: #f44336;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🌐 Network Isolation Demo</h1>
+
+        <div class="network-box public">
+            <h3>Public Network</h3>
+            <p>✅ Frontend can access Backend</p>
+            <p>❌ Frontend cannot access Database</p>
+        </div>
+
+        <div class="network-box private">
+            <h3>Private Network</h3>
+            <p>✅ Backend can access Database</p>
+            <p>❌ Frontend cannot access Database</p>
+        </div>
+
+        <h3>Test API Endpoints:</h3>
+        <button onclick="testHealth()">Test Backend Health</button>
+        <button onclick="testUsers()">Get Users from Database</button>
+        <button onclick="testNetwork()">Test Network Isolation</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const resultDiv = document.getElementById('result');
+
+        async function testHealth() {
+            try {
+                const response = await fetch('/api/health');
+                const data = await response.json();
+                showResult('Backend Health:', data, 'success');
+            } catch (err) {
+                showResult('Error:', err.message, 'error');
+            }
+        }
+
+        async function testUsers() {
+            try {
+                const response = await fetch('/api/users');
+                const data = await response.json();
+                showResult('Users from Database:', data, 'success');
+            } catch (err) {
+                showResult('Error:', err.message, 'error');
+            }
+        }
+
+        async function testNetwork() {
+            try {
+                const response = await fetch('/api/network-test');
+                const data = await response.json();
+
+                let result = 'Network Isolation Test:\n\n';
+                result += '✅ Backend → Database: ' + (data.database.accessible ? 'Accessible' : 'Blocked') + '\n';
+                if (data.database.error) result += '   Error: ' + data.database.error + '\n';
+                result += '\n';
+                result += '❌ Backend → Frontend: ' + (data.frontend.accessible ? 'Accessible (WRONG!)' : 'Blocked (CORRECT!)') + '\n';
+                if (data.frontend.error) result += '   Error: ' + data.frontend.error + '\n';
+
+                showResult('Network Test Results:', result, 'success');
+            } catch (err) {
+                showResult('Error:', err.message, 'error');
+            }
+        }
+
+        function showResult(title, data, type) {
+            const className = type === 'success' ? 'success' : 'error';
+            const dataStr = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+            resultDiv.innerHTML = `<div class="${className}"><strong>${title}</strong>\n${dataStr}</div>`;
+        }
+    </script>
+</body>
+
+</html>
